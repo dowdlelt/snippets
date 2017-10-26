@@ -7,7 +7,7 @@ datadir='/mnt/data0/tbs_opiate/data/'
 modeldir='/mnt/data0/tbs_opiate/model_params/fsl/'
 
 
-#This will not run FEAT with the selected settings. 
+#This will run FEAT with the selected settings. 
 
 DATA4D=${datadir}sub-${subnum}/ses-preTMS/derivatives/denoised_pain/pain_medn_nat.nii.gz
 CONFOUNDS=${datadir}sub-${subnum}/ses-preTMS/derivatives/denoised_pain/meica.dn_pain_e1.pain/motion.1D
@@ -17,13 +17,17 @@ E1SBREF=${datadir}sub-${subnum}/ses-preTMS/derivatives/denoised_pain/sub-${subnu
 BRAINFEAT=${datadir}sub-${subnum}/ses-preTMS/derivatives/sub-${subnum}_ses-preTMS_T1w.anat/T1_biascorr_brain.nii.gz
 
 for i in '3_seconds_removed.fsf'; do
-  sed -e 's@DATA4D@'$DATA4D'@g' \
+  sed -e 's@DATA4D@'$DATA4D'@g' \ #These match the variable names I placed in the .fsf file. 
    	-e 's@CONFOUNDS@'$CONFOUNDS'@g' \
    	-e 's@FMAPFEAT@'$FMAPFEAT'@g' \
 	-e 's@MAGBRAINFEAT@'$MAGBRAINFEAT'@g' \
 	-e 's@E1SBREF@'$E1SBREF'@g' \
 	-e 's@BRAINFEAT@'$BRAINFEAT'@g' <$i> ${datadir}sub-${subnum}/ses-preTMS/derivatives/${subnum}_feat.fsf
 done
+
+# I have pre and post data, I run them seperate - hence the copy paste job here. 
+
+
 cd ${datadir}sub-${subnum}/ses-preTMS/derivatives/denoised_pain/
 feat ${datadir}sub-${subnum}/ses-preTMS/derivatives/${subnum}_feat.fsf &
 
